@@ -36,6 +36,8 @@ class NewQuestionView extends Component {
 			/>
 			<Input
 				label = "Answer"
+				multiline = {true}
+				numberOfLines = {4}
 				value={this.state.answer}
 				placeholder='Type the correct answer'
 				onChange={this.onChangeAnswerInput}

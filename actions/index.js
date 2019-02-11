@@ -1,3 +1,5 @@
+import { getData } from '../utils/api'
+
 export const RECEIVE_DATA = 'RECEIVE_DATA'
 export const ADD_DECK = 'ADD_ENTRY'
 

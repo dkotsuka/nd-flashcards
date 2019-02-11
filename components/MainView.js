@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, StatusBar } from 'react-native'
 import DeckListView from './DeckListView'
 import CreateDeckView from './CreateDeckView'
 import { 
@@ -10,24 +10,22 @@ import {
 } from 'react-navigation';
 
 const DeckList = createStackNavigator({
- 	screen: DeckListView,
+ 	screen: DeckListView },{
+ 	navigationOptions: {
+ 		tabBarLabel: 'All decks',
+ 	}
 })
-
-DeckList.navigationOptions = {
- 	tabBarLabel: 'My decks',
-}
 
 const CreateDeck = createStackNavigator({
- 	screen: CreateDeckView,
+ 	screen: CreateDeckView },{
+ 	navigationOptions: {
+ 		tabBarLabel: 'New deck',
+ 	}
 })
-
-DeckList.navigationOptions = {
- 	tabBarLabel: 'New deck',
-}
 
 const MainView = createMaterialTopTabNavigator({
-  Home: DeckListView,
-  Create: CreateDeckView,
+  DeckList,
+  CreateDeck,
 })
 
-export default createAppContainer(MainView)
+export default MainView
