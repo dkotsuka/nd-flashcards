@@ -4,6 +4,7 @@ import { Card } from 'react-native-elements'
 import TextButton from './TextButton'
 
 import { mainblue } from '../utils/colors'
+import { setLocalNotification, clearLocalNotification } from '../utils/helpers'
 
 class ResultView extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -17,6 +18,10 @@ class ResultView extends Component {
 		      	fontWeight: 'bold',
 		  	},
 	    }
+	}
+	componentDidMount() {
+		clearLocalNotification()
+		.then(setLocalNotification)
 	}
 	onPressRestart = () => {
 		const { navigation } = this.props

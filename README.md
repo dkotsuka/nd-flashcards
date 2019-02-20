@@ -6,7 +6,7 @@ The main idea is an application where we can create cards with questions and ans
 ## Installing
 This app was developed for Android devices. To run it, in development mode:
 * download this repository
-* install dependencies using `npm install`
+* install dependencies using `yarn install`
 * run `yarn start`
 
 ## Running the App
