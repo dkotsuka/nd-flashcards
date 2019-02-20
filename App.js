@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { View, StatusBar } from 'react-native';
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import reducer from './reducers'
@@ -13,7 +12,6 @@ export default class App extends Component {
     const store = createStore(reducer, middleware)
     return (
       <Provider store={store}>
-        <View style={{height: StatusBar.currentHeight, backgroundColor: blue}}/>
         <AppNavigator />
       </Provider>
     )

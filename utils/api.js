@@ -7,10 +7,10 @@ export function getData() {
 		.then(res => JSON.parse(res))
 }
 
-export function createDeck({key}) {
-	return AsyncStorage.mergeItem(STORAGE_KEY, JSON.stringify({
-		[key]: {}
-	}))
+export function createDeck(deck) {
+	return AsyncStorage.mergeItem(STORAGE_KEY, JSON.stringify(
+		{decks: deck}
+	))
 }
 
 export function removeDeck(key) {
@@ -23,13 +23,18 @@ export function removeDeck(key) {
 		})
 }
 
-export function submitFlashCard({entry, key}) {
+export function submitQuestion(deckId, counter, question) {
 	return AsyncStorage.mergeItem(STORAGE_KEY, JSON.stringify({
-		[key]: entry
+		decks: {
+			[deckId]: {cardCounter: counter}
+		},
+		questions: {
+			[deckId]: { [question.id]: question }
+		}
 	}))
 }
 
-export function removeFlashCard(key) {
+export function removeQuestion(key) {
 	return AsyncStorage.getItem(STORAGE_KEY)
 		.then((res)=> {
 			const data = JSON.parse(res)

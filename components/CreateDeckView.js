@@ -1,88 +1,81 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, KeyboardAvoidingView } from 'react-native'
-import { Input, Button, Divider } from 'react-native-elements'
+import { View, Text, StyleSheet, Button } from 'react-native'
+import { Input, Card } from 'react-native-elements'
 import { connect } from 'react-redux'
-import { purple } from '../utils/colors'
+import { mainblue } from '../utils/colors'
 import { createDeck } from '../utils/api'
 import { createDeckId } from '../utils/helpers'
 import { addDeck } from '../actions'
 
 class CreateDeckView extends Component {
+	static navigationOptions = {
+	    header: null,
+	    tabBarLabel: 'New deck'
+	 }
+	 
 	state = {
 		title: "",
 	}
-	static navigationOptions = {
-	    header: null,
-	 }
+
 	onChangeTitleInput = (e) => {
 		const title = e.nativeEvent.text
 		this.setState({title})
 	}
 	onSubmit = () => {
+
+		if(this.state.title.length > 0) {
+			const id = createDeckId()
+			const name = this.state.title
+			const newDeck = {[id]: {id, name, cardCounter: 0 }}
+
+			createDeck(newDeck)
+			.then(() => {
+				this.props.dispatch(addDeck(newDeck))
+				this.props.navigation.navigate('Deck',{id, name})
+			})			
+		} else {
+			alert("Title is required to create a new deck!")
+		}
 		
-		const id = createDeckId()
-		const newDeck = {[id]: {id: id, name: this.state.title }}
-
-		this.props.dispatch(addDeck(newDeck))
-		createDeck(newDeck)
-
-		//TODO: redirect to individual view of new deck.
+		
 	}
 	render() {
 		return (
-			<KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-				<View style={styles.cardContainer}>
-					<Text style={styles.header}>Create New Deck</Text>
-					<Divider style={{ backgroundColor: 'gray', height: 1 }} />
-					<Input
-						label = "Title"
-						maxLength={30}
-						value={this.state.title}
-						placeholder='Enter the deck name'
-						containerStyle={styles.input}
-						onChange={this.onChangeTitleInput}
-					/>
-					<Button title="CREATE NEW DECK" 
-						containerStyle={[styles.button]}
-						buttonStyle={{backgroundColor: purple}}
-						onPress={this.onSubmit}/>
-				</View>
-			</KeyboardAvoidingView>
+			<Card title="CREATE NEW DECK" containerStyle={styles.container}>
+				<Input
+					label = "TITLE"
+					maxLength={15}
+					value={this.state.title}
+					placeholder='Enter the deck name'
+					containerStyle={styles.input}
+					onChange={this.onChangeTitleInput}
+				/>
+				<Button
+			        onPress={this.onSubmit} 
+			        title="CREATE"
+			        color={mainblue}/>
+			</Card>
 		)
 	}
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1, 
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	cardContainer: {
-		alignSelf: 'stretch',
-		margin: 5,
-		marginBottom: 30,
-		padding: 15,
-		borderRadius: 5,
-	    elevation: 5,
-	},
-	header: {
-		fontSize: 24,
-		marginBottom: 10,
-		color: 'gray',
-		fontWeight: 'bold'
-
+		borderRadius:5
 	},
 	input: {
 		marginTop: 5,
 		marginBottom: 15
 	},
-	row: {
-		flexDirection: 'row',
-		justifyContent: 'flex-end',
+	buttonContainer:{
+		borderRadius:5,
+		backgroundColor: mainblue
 	},
-	button: {
-		flexGrow: 1,
+	buttonText: {
+		textAlign: 'center',
+		lineHeight: 40,
+		height: 40,
+		color: 'white',
 	}
 })
 

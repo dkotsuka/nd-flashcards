@@ -1,9 +1,25 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { Input, Button, Divider } from 'react-native-elements'
-import { purple } from '../utils/colors'
+import { Input, Card } from 'react-native-elements'
+import { connect } from 'react-redux'
+import { mainblue } from '../utils/colors'
+import { handleAddQuestion } from '../actions'
+import { createCardId } from '../utils/helpers'
+import TextButton from './TextButton'
 
 class NewQuestionView extends Component {
+	static navigationOptions = ({ navigation }) => {
+	    return {
+	      	title: navigation.getParam('name', 'NEW QUESTION').toUpperCase(),
+	      	headerStyle: {
+		      	backgroundColor: mainblue,
+		    },
+		    headerTintColor: '#fff',
+		    headerTitleStyle: {
+		      	fontWeight: 'bold',
+		  	},
+	    }
+	}
 	state = {
 		question: "",
 		answer: ""
@@ -17,60 +33,71 @@ class NewQuestionView extends Component {
 		this.setState({answer})
 	}
 	onCancel = () => {
-		//back to last view
-
+		this.props.navigation.goBack()
 	}
 	onSubmit = () => {
-		//save the question in the repective deck
+		const { question, answer } = this.state
+		const { dispatch, deck } = this.props
+		if(question.length > 0 && answer.length > 0){
+			const counter = deck.cardCounter + 1
+			handleAddQuestion(deck.id, counter, {
+				id: createCardId(),
+				question,
+				answer,
+			})(dispatch)
+
+			this.props.navigation.goBack()				
+		} else {
+			alert("Question and answer are required.")
+		}
 	}
 	render() {
-		return <View style={styles.container}>
-			<Text style={styles.header}>New Card</Text>
-			<Divider style={{ backgroundColor: 'gray', height: 1 }} />
-			<Input
-				label = "Question"
-				value={this.state.question}
-				placeholder='Enter the new question'
-				onChange={this.onChangeQuestionInput}
-				containerStyle={styles.input}
-			/>
-			<Input
-				label = "Answer"
-				multiline = {true}
-				numberOfLines = {4}
-				value={this.state.answer}
-				placeholder='Type the correct answer'
-				onChange={this.onChangeAnswerInput}
-				containerStyle={styles.input}
-			/>
-			<View style={styles.row}>
-				<Button title="Cancel" 
-					containerStyle={[styles.button, {marginRight: 5}]}
-					buttonStyle={{backgroundColor: 'gray'}}
-					onPress={this.onCancel}/>
-				<Button title="Save" 
-					containerStyle={[styles.button, {marginLeft: 5}]}
-					buttonStyle={{backgroundColor: purple}}
-					onPress={this.onSubmit}/>
-			</View>
-		</View>
+		return (
+			<Card title="ADD NEW QUESTION" containerStyle={styles.container}>
+				<Input
+					label = "Question"
+					value={this.state.question}
+					placeholder='Enter the new question'
+					onChange={this.onChangeQuestionInput}
+					containerStyle={styles.input}
+				/>
+				<Input
+					label = "Answer"
+					multiline = {true}
+					numberOfLines = {4}
+					value={this.state.answer}
+					placeholder='Type the correct answer'
+					onChange={this.onChangeAnswerInput}
+					containerStyle={styles.input}
+				/>
+				<View style={styles.row}>
+					<TextButton
+						onPress={this.onCancel}
+						containerStyle={[styles.button, styles.buttonOutline]}
+						textStyle={styles.textOutline}
+						text="CANCEL"/>
+					<TextButton
+						onPress={this.onSubmit}
+						containerStyle={[styles.button, styles.buttonFill]}
+						textStyle={styles.textFill}
+						text="SAVE"/>
+				</View>
+			</Card>
+		)
 	}
 }
 
+function mapStateToProps({decks}, {navigation}) {
+	const deckId = navigation.getParam('id', null)
+	return {deck: decks[deckId]}
+}
+
+export default connect(mapStateToProps)(NewQuestionView)
+
 const styles = StyleSheet.create({
 	container: {
-		alignSelf: 'stretch',
-		margin: 15,
-		padding: 15,
 		borderRadius: 5,
-	    elevation: 5,
-	},
-	header: {
-		fontSize: 24,
-		marginBottom: 10,
-		color: 'gray',
-		fontWeight: 'bold'
-
+	    elevation: 3,
 	},
 	input: {
 		marginTop: 5,
@@ -78,11 +105,30 @@ const styles = StyleSheet.create({
 	},
 	row: {
 		flexDirection: 'row',
-		justifyContent: 'flex-end',
 	},
 	button: {
-		flexGrow: 1,
+		height: 48,
+		justifyContent: 'center',
+		marginTop: 5,
+		flex: 1,
+		margin: 5
+	},
+	textFill: {
+		color: "white",
+		textAlign: 'center',
+	},
+	buttonFill: {
+		backgroundColor: mainblue,
+		borderRadius:5,
+	},
+	textOutline: {
+		color: mainblue,
+		textAlign: 'center',
+	},
+	buttonOutline: {
+		backgroundColor: 'white',
+		borderWidth: 2,
+		borderRadius:5,
+		borderColor: mainblue,
 	}
 })
-
-export default NewQuestionView

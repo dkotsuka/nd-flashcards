@@ -1,2 +1,1 @@
-export const blue = '#021aee'
-export const purple = '#d602ee'
+export const mainblue = '#1E88E5'
