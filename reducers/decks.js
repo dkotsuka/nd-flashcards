@@ -1,4 +1,4 @@
-import { RECEIVE_DECK, ADD_DECK, UPDATE_COUNTER } from '../actions'
+import { RECEIVE_DECK, ADD_DECK, DELETE_DECK, UPDATE_COUNTER } from '../actions'
 
 function decks(state = {}, action) {
 	switch (action.type) {
@@ -7,11 +7,18 @@ function decks(state = {}, action) {
 				...state,
 				...action.data
 			}
+			
 		case ADD_DECK:
 			return {
 				...state,
 				...action.deck
 			}
+
+		case DELETE_DECK:
+			const deletedFromState = Object.assign({}, state)
+			delete deletedFromState[action.id]
+			return deletedFromState
+
 		case UPDATE_COUNTER:
 			return {
 				...state,

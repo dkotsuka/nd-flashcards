@@ -4,13 +4,11 @@ import { AsyncStorage } from 'react-native'
 const NOTIFICATION_KEY = 'FlashCards:notifications'
 
 export function createDeckId() {
-	const id = 'deck' + (new Date()).getTime().toString(16).slice(2)
-	return id
+	return ('deck' + (new Date()).getTime().toString(16).slice(2))
 }
 
 export function createCardId() {
-	const id = 'card' + (new Date()).getTime().toString(16).slice(2)
-	return id
+	return 'card' + (new Date()).getTime().toString(16).slice(2)
 }
 
 export function clearLocalNotification() {

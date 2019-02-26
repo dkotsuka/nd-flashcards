@@ -13,13 +13,21 @@ export function createDeck(deck) {
 	))
 }
 
-export function removeDeck(key) {
+export function removeDeck(deckId) {
 	return AsyncStorage.getItem(STORAGE_KEY)
-		.then((res)=> {
-			const data = JSON.parse(res)
-			data[key] = undefined
-			delete data[key]
-			AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+		.then((res) => JSON.parse(res))
+		.then((data) => {
+			data.decks = {
+				...data.decks,
+				[deckId] : undefined
+			}
+			delete data.decks[deckId]
+			data.questions = {
+				...data.questions,
+				[deckId] : undefined
+			}
+			delete data.questions[deckId]
+			return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data))
 		})
 }
 
@@ -32,14 +40,4 @@ export function submitQuestion(deckId, counter, question) {
 			[deckId]: { [question.id]: question }
 		}
 	}))
-}
-
-export function removeQuestion(key) {
-	return AsyncStorage.getItem(STORAGE_KEY)
-		.then((res)=> {
-			const data = JSON.parse(res)
-			data[key] = undefined
-			delete data[key]
-			AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data))
-		})
 }

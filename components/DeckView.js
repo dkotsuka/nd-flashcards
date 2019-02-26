@@ -7,8 +7,8 @@ import {
 } from 'react-navigation'
 import { mainblue } from '../utils/colors'
 import TextButton from './TextButton'
-import { getData } from '../utils/api'
-import { receiveQuestions } from '../actions'
+import { getData, removeDeck } from '../utils/api'
+import { receiveQuestions, deleteDeck } from '../actions'
 
 class DeckView extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -29,6 +29,13 @@ class DeckView extends Component {
 			dispatch(receiveQuestions(questions))
 		}).catch((err) => console.log(err))
 	}
+	onPressDelete = () => {
+		const { navigation, deck, dispatch } = this.props
+		removeDeck(deck.id).then(() => {
+			dispatch(deleteDeck(deck.id))
+			navigation.navigate( "Main")
+		}).catch((err) => console.log(err))
+	}
 	onPressAddQuestion = () => {
 		const { navigation, deck } = this.props
 		navigation.navigate( "NewQuestion", { id: deck.id, name: deck.name })
@@ -39,8 +46,8 @@ class DeckView extends Component {
 	}
 	render(){
 		const {deck} = this.props
-		return (
-			<Card title="INFO" containerStyle={styles.container}>
+		return <Card title="INFO" containerStyle={styles.container}>
+			{typeof deck === 'undefined' ? <Text >empty</Text> : (
 				<View style={styles.row}>
 					<View >
 						<Text style={styles.labels}>NAME:</Text>
@@ -51,18 +58,24 @@ class DeckView extends Component {
 						<Text style={styles.values}>{deck.cardCounter}</Text>
 					</View>
 				</View>
-				<TextButton
-					onPress={this.onPressAddQuestion}
-					containerStyle={[styles.button, styles.buttonOutline]}
-					textStyle={styles.textOutline}
-					text={"ADD QUESTION"}/>
-				<TextButton
-					onPress={this.onPressStartQuiz}
-					containerStyle={[styles.button, styles.buttonFill]}
-					textStyle={styles.textFill}
-					text={"START QUIZ"}/>
-			</Card>
-		)
+			)}
+
+			<TextButton
+				onPress={this.onPressDelete}
+				containerStyle={styles.button}
+				textStyle={styles.deleteText}
+				text={"DELETE DECK"}/>
+			<TextButton
+				onPress={this.onPressAddQuestion}
+				containerStyle={[styles.button, styles.buttonOutline]}
+				textStyle={styles.textOutline}
+				text={"ADD QUESTION"}/>
+			<TextButton
+				onPress={this.onPressStartQuiz}
+				containerStyle={[styles.button, styles.buttonFill]}
+				textStyle={styles.textFill}
+				text={"START QUIZ"}/> 
+		</Card>
 	}
 }
 
@@ -111,5 +124,9 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 		borderRadius:5,
 		borderColor: mainblue,
+	},
+	deleteText: {
+		color: 'red',
+		textAlign: 'center',
 	}
 })

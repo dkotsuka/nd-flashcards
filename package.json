@@ -4,10 +4,15 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest --coverage"
   },
   "dependencies": {
+    "babel-jest": "^24.1.0",
+    "babel-preset-react-native": "^4.0.1",
     "expo": "^32.0.0",
+    "jest": "^24.1.0",
+    "mock-async-storage": "^2.0.4",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "^1.0.0",

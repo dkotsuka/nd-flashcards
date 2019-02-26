@@ -28,8 +28,11 @@ class ResultView extends Component {
 		const deck = navigation.getParam('deck', null)
 		navigation.push('Quiz', { deck })
 	}
-	onPressBackToList = () => {
-		this.props.navigation.navigate('Main')
+	onPressBackToDeck = () => {
+		const { navigation } = this.props
+		const deck = navigation.getParam('deck', null)
+		const { id, name } = deck
+		this.props.navigation.navigate('Deck',{id, name})
 	}
 	render(){
 		const { navigation } = this.props
@@ -50,10 +53,10 @@ class ResultView extends Component {
 				textStyle={styles.restartButtonText}
 				text="RESTART"/>
 			<TextButton 
-				onPress={this.onPressBackToList}
+				onPress={this.onPressBackToDeck}
 				containerStyle={styles.backButton}
 				textStyle={styles.backButtonText}
-				text="TO MAIN"/>
+				text="TO DECK"/>
 		</Card>
 	}
 }
