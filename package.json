@@ -10,7 +10,7 @@
   "dependencies": {
     "babel-jest": "^24.1.0",
     "babel-preset-react-native": "^4.0.1",
-    "expo": "^32.0.0",
+    "expo": "^46.0.14",
     "jest": "^24.1.0",
     "mock-async-storage": "^2.0.4",
     "react": "16.5.0",
